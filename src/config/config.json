@@ -1,0 +1,16 @@
+{
+    "defaultPrefix": "&",
+    "token": "",
+    "databaseString": "",
+    "ticketConfig": {
+        "currentDay": 3,
+        "maxTickets": 100,
+        "cooldownAfterClose": 10800000,
+        "ticketInactiveTime": 300000,
+        "emojiName": "📬",
+        "mainGuildId": "856724080375103498",
+        "centralGuildId": "890051931974828123",
+        "highParentId": "960021265517793342",
+        "lowParentId": "960021217803390976"
+    }
+}

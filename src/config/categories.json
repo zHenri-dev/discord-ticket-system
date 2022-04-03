@@ -1,0 +1,27 @@
+{
+    "payments": {
+        "name": "Problemas com pagamentos ou atvação de produtos.",
+        "emoji": "💰",
+        "admin": true
+    },
+    "doubts": {
+        "name": "Dúvidas sobre discord, servidores, ou webstie.",
+        "emoji": "🤔",
+        "admin": false
+    },
+    "reports": {
+        "name": "Denunciar jogadores ou erros em nossa rede.",
+        "emoji": "⚖️",
+        "admin": false
+    },
+    "staffreport": {
+        "name": "Problemas com envolvimento de membros da equipe.",
+        "emoji": "🕵️‍♂️",
+        "admin": true
+    },
+    "otherproblems": {
+        "name": "Problemas não listados anteriormente.",
+        "emoji": "📬",
+        "admin": false
+    }
+}
