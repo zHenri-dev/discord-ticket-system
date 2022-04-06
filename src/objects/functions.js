@@ -81,15 +81,11 @@ module.exports = class Functions {
             if (histories.length == 0) return "\n⠀Nenhuma ação feita recentemente.";
             histories.sort((a, b) => { return new Date(b.createdAt) - new Date(a.createdAt) });
             let historyString = "";
-            let first = histories[0];
-            if (first) historyString += `\n\`[${moment(first.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${first.string}`
-            let second = histories[1];
-            if (second) historyString += `\n\`[${moment(second.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${second.string}`
-            let third = histories[2];
-            if (third) historyString += `\n\`[${moment(third.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${third.string}`
-            let fourth = histories[3];
-            if (fourth) historyString += `\n\`[${moment(fourth.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${fourth.string}`
-            let remain = histories.length - 4;
+            for (let x = 0; x < this.client.ticketConfig.historyLength; x++) {
+                let history = histories[x];
+                if (history) historyString += `\n\`[${moment(history.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${history.string}`
+            }
+            let remain = histories.length - this.client.ticketConfig.historyLength;
             if (remain > 0) historyString += `\n[+${remain} alterações feitas nas últimas 24 horas.](https://discord.com/channels/${this.client.ticketConfig.mainGuildId}/)`
             return historyString;
         } catch (error) {
@@ -109,20 +105,16 @@ module.exports = class Functions {
             let user = await this.client.users.cache.get(ticket.userId);
             if (!user) return;
             ticket.history.sort((a, b) => { return new Date(b.createdAt) - new Date(a.createdAt) });
-            let history = "";
-            let first = ticket.history[0];
-            if (first) history += `\n\`[${moment(first.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${first.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
-            let second = ticket.history[1];
-            if (second) history += `\n\`[${moment(second.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${second.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
-            let third = ticket.history[2];
-            if (third) history += `\n\`[${moment(third.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${third.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
-            let fourth = ticket.history[3];
-            if (fourth) history += `\n\`[${moment(fourth.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${fourth.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
-            let remain = ticket.history.length - 4;
-            if (remain > 0) history += `\n[+${remain} alterações feitas nas últimas 24 horas.](https://discord.com/channels/${this.client.ticketConfig.centralGuildId}/)`
+            let historyString = "";
+            for (let x = 0; x < this.client.ticketConfig.historyLength; x++) {
+                let history = ticket.history[x];
+                if (history) historyString += `\n\`[${moment(history.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${history.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
+            }
+            let remain = ticket.history.length - this.client.ticketConfig.historyLength;
+            if (remain > 0) historyString += `\n[+${remain} alterações feitas nas últimas 24 horas.](https://discord.com/channels/${this.client.ticketConfig.centralGuildId}/)`
             let newMessageEmbed = new MessageEmbed()
                 .setAuthor({ name: "Canal de atendimento.", iconURL: "https://i.imgur.com/kLw1M7i.png" })
-                .setDescription(`Este canal foi criado por ${user.username} em ${moment(ticket.createdAt).format("LLL")}.\n**Categoria:** ${ticket.category}\n\n⠀ **Histórico do canal:**${history}\n\n⠀ **Informações:**\n${this.client.customEmojis.connection} Latência: ~${this.client.ws.ping}ms.`)
+                .setDescription(`Este canal foi criado por ${user.username} em ${moment(ticket.createdAt).format("LLL")}.\n**Categoria:** ${ticket.category}\n\n⠀ **Histórico do canal:**${historyString}\n\n⠀ **Informações:**\n${this.client.customEmojis.connection} Latência: ~${this.client.ws.ping}ms.`)
                 .setFooter({ text: `ID do membro: ${user.id}  —  ID do canal: ${channel.id}` });
             message.edit({ embeds: [newMessageEmbed] }).catch(() => { });
         } catch (error) {
