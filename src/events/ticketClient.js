@@ -90,6 +90,7 @@ module.exports = class {
                     string: `**${message.author.tag}** criou um canal de suporte.`,
                     createdAt: new Date().getTime(),
                 });
+                this.client.selects = this.client.selects.filter(select => select.userId != message.author.id)
                 let messageContent = "Mensagem enviada sem conteúdo!";
                 if (message.content) messageContent = message.content;
                 let attachments = "";
@@ -144,7 +145,7 @@ module.exports = class {
                     .setTitle("Recebemos sua mensagem!")
                     .setDescription(`Acabamos de receber sua mensagem **${message.author.username}**, você receberá uma\nresposta de nossos atendentes atráves deste canal.`)
                     .setThumbnail("https://i.imgur.com/sKQqcnD.png");
-                message.reply({embeds: [sentEmbed]}).catch(() => { });
+                message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
             }
         } catch (error) {
             if (error) console.error(error);
