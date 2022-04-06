@@ -12,6 +12,8 @@
         "centralGuildId": "890051931974828123",
         "highParentId": "960021265517793342",
         "lowParentId": "960021217803390976",
-        "commentColor": "#7289DA"
+        "commentColor": "#7289DA",
+        "selectedColor": "#11806A",
+        "errorColor": "#FF4041"
     }
 }

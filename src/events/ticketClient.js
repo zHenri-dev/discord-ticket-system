@@ -51,6 +51,11 @@ module.exports = class {
                     message.reply({ embeds: [maxTicketsEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                     return;
                 }
+                let waitingEmbed = new MessageEmbed()
+                    .setTitle("Aguarde!")
+                    .setDescription(`Estamos preparando um lugar confortável para seu canal de\natendimento. Este processo pode demorar alguns segundos!`)
+                    .setThumbnail(`https://i.imgur.com/PC6QhJJ.png`)
+                message.channel.send({ embeds: [waitingEmbed] });
                 let category = this.client.categories["otherproblems"];
                 let userSelect = this.client.selects.find(select => select.userId == message.author.id);
                 if (userSelect) {
@@ -99,7 +104,7 @@ module.exports = class {
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 let sentEmbed = new MessageEmbed()
-                    .setTitle("Recemos sua mensagem!")
+                    .setTitle("Recebemos sua mensagem!")
                     .setDescription(`Acabamos de receber sua mensagem **${message.author.username}**, você receberá uma\nresposta de nossos atendentes atráves deste canal.`)
                     .setThumbnail("https://i.imgur.com/sKQqcnD.png");
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -110,7 +115,7 @@ module.exports = class {
                     let errorEmbed = new MessageEmbed()
                         .setAuthor({ name: `${message.author.username} não foi possível criar seu canal de atendimento!`, iconURL: message.author.displayAvatarURL() })
                         .setDescription("Ocorreu um erro ao criar seu canal de atendimento, pedimos desculpas por isto e pedimos que tente cria-lo novamente enviando outra mensagem.")
-                        .setColor("#FF4041")
+                        .setColor(this.client.ticketConfig.errorColor);
                     message.reply({ embeds: [errorEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                     ticket.closed = true;
                     ticket.save();
@@ -131,10 +136,15 @@ module.exports = class {
                 let lastResponceUser = await this.client.users.cache.get(ticket.lastResponceUserId);
                 if (lastResponceUser && ticket.lastResponceAt + this.client.ticketConfig.ticketInactiveTime <= new Date().getTime()) {
                     channel.send({ content: `${lastResponceUser}` }).then(msg => { msg.delete().catch(() => { }) }).catch(() => { });
-                    messageEmbed.setFooter({text: `${lastResponceUser.username} foi notificado do envio desta mensagem!`, iconURL: "https://i.imgur.com/Aatgi3x.png"})
+                    messageEmbed.setFooter({ text: `${lastResponceUser.username} foi notificado do envio desta mensagem!`, iconURL: "https://i.imgur.com/Aatgi3x.png" })
                 }
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
+                let sentEmbed = new MessageEmbed()
+                    .setTitle("Recebemos sua mensagem!")
+                    .setDescription(`Acabamos de receber sua mensagem **${message.author.username}**, você receberá uma\nresposta de nossos atendentes atráves deste canal.`)
+                    .setThumbnail("https://i.imgur.com/sKQqcnD.png");
+                message.reply({embeds: [sentEmbed]}).catch(() => { });
             }
         } catch (error) {
             if (error) console.error(error);

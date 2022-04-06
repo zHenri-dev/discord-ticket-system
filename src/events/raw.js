@@ -51,14 +51,14 @@ module.exports = class {
                             this.client.selects.push({ userId: i.user.id, category: id });
                         } else {
                             let current = this.client.selects[index];
-                            let newObject = {...current, category: id};
+                            let newObject = { ...current, category: id };
                             this.client.selects[index] = newObject;
                         }
                         let successEmbed = new MessageEmbed()
                             .setTitle("Canal de suporte classificado com sucesso!")
-                            .setDescription("Todas as mensagens enviadas neste canal serão redirecionadas aos atendentes\nresponsáveis pela categoria que você o escolheu.")
+                            .setDescription("⠀\nTodas as mensagens enviadas neste canal serão redirecionadas aos atendentes\nresponsáveis pela categoria que você o escolheu.")
                             .setFooter({ text: `${category.name}` })
-                            .setColor("#265f57");
+                            .setColor(this.client.ticketConfig.selectedColor);
                         categorySelector.reply({ embeds: [successEmbed] }).catch(() => { });
                     });
                 }
