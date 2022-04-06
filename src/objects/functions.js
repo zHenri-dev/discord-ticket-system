@@ -85,7 +85,11 @@ module.exports = class Functions {
             if (first) historyString += `\n\`[${moment(first.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${first.string}`
             let second = histories[1];
             if (second) historyString += `\n\`[${moment(second.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${second.string}`
-            let remain = histories.length - 2;
+            let third = histories[2];
+            if (third) historyString += `\n\`[${moment(third.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${third.string}`
+            let fourth = histories[3];
+            if (fourth) historyString += `\n\`[${moment(fourth.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${fourth.string}`
+            let remain = histories.length - 4;
             if (remain > 0) historyString += `\n[+${remain} alterações feitas nas últimas 24 horas.](https://discord.com/channels/${this.client.ticketConfig.mainGuildId}/)`
             return historyString;
         } catch (error) {
@@ -110,7 +114,11 @@ module.exports = class Functions {
             if (first) history += `\n\`[${moment(first.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${first.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
             let second = ticket.history[1];
             if (second) history += `\n\`[${moment(second.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${second.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
-            let remain = ticket.history.length - 2;
+            let third = ticket.history[2];
+            if (third) history += `\n\`[${moment(third.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${third.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
+            let fourth = ticket.history[3];
+            if (fourth) history += `\n\`[${moment(fourth.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${fourth.string.replace("%highEmoji%", this.client.customEmojis.uparrow).replace("%lowEmoji%", this.client.customEmojis.downarrow)}`
+            let remain = ticket.history.length - 4;
             if (remain > 0) history += `\n[+${remain} alterações feitas nas últimas 24 horas.](https://discord.com/channels/${this.client.ticketConfig.centralGuildId}/)`
             let newMessageEmbed = new MessageEmbed()
                 .setAuthor({ name: "Canal de atendimento.", iconURL: "https://i.imgur.com/kLw1M7i.png" })

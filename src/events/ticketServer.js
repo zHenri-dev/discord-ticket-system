@@ -28,7 +28,7 @@ module.exports = class {
                     let commentEmbed = new MessageEmbed()
                         .setAuthor({ name: `${message.author.username} deixou um comentário!`, iconURL: message.author.displayAvatarURL() })
                         .setDescription(`${commentContent}`)
-                        .setColor("#ffffff");
+                        .setColor(`${this.client.ticketConfig.commentColor}`);
                     if (message.attachments.first()) commentEmbed.setImage(message.attachments.first().url);
                     message.channel.send({ embeds: [commentEmbed] }).catch(() => { });
                     message.delete().catch(() => { });

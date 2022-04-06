@@ -3,7 +3,7 @@
     "token": "",
     "databaseString": "",
     "ticketConfig": {
-        "currentDay": 3,
+        "currentDay": 6,
         "maxTickets": 100,
         "cooldownAfterClose": 10800000,
         "ticketInactiveTime": 300000,
@@ -11,6 +11,7 @@
         "mainGuildId": "856724080375103498",
         "centralGuildId": "890051931974828123",
         "highParentId": "960021265517793342",
-        "lowParentId": "960021217803390976"
+        "lowParentId": "960021217803390976",
+        "commentColor": "#7289DA"
     }
 }

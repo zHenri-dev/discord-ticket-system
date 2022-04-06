@@ -47,7 +47,7 @@ module.exports = class Remanejar {
             );
             let selectNewCategoryMenu = await message.channel.send({ embeds: [selectNewCategoryEmbed], components: [row] }).catch(() => { });
             const filter = (interaction) => interaction.user.id == message.author.id;
-            const collector = selectNewCategoryMenu.createMessageComponentCollector({ filter, time: 60000 });
+            const collector = selectNewCategoryMenu.createMessageComponentCollector({ filter, time: 60000, max: 1 });
             collector.on("collect", async i => {
                 i.deferUpdate();
                 if (i.customId == "remanejar-select") {

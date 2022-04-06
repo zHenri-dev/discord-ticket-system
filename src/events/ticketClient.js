@@ -57,7 +57,7 @@ module.exports = class {
                     category = this.client.categories[userSelect.category]
                 }
                 let parent = this.client.ticketConfig.lowParentId;
-                if (category.admin) parent = this.client.ticketConfig.highParentId;
+                if (category.high) parent = this.client.ticketConfig.highParentId;
                 let channel = await central.channels.create(`0${message.author.discriminator}${ticketCount + 1}`, { parent, topic: category.name }).catch((error) => { console.log(error); console.log(`\x1b[91m[TicketClient] Ocorreu um erro ao criar o ticket do membro ${message.author.tag} \x1b[0m`); })
                 if (!channel) return;
                 let firstMessageEmbed = new MessageEmbed()
