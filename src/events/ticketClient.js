@@ -91,7 +91,7 @@ module.exports = class {
                     createdAt: new Date().getTime(),
                 });
                 this.client.selects = this.client.selects.filter(select => select.userId != message.author.id)
-                let messageContent = "Mensagem enviada sem conteúdo!";
+                let messageContent = "Mensagem sem conteúdo.";
                 if (message.content) messageContent = message.content;
                 let attachments = "";
                 message.attachments.forEach(attachment => {
@@ -123,7 +123,7 @@ module.exports = class {
                     this.client.functions.updateMessages();
                     return;
                 }
-                let messageContent = "Mensagem enviada sem conteúdo!";
+                let messageContent = "Mensagem sem conteúdo.";
                 if (message.content) messageContent = message.content;
                 let attachments = "";
                 message.attachments.forEach(attachment => {
