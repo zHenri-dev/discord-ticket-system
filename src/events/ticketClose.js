@@ -24,7 +24,7 @@ module.exports = class {
                         if (user) {
                             tag = user.tag;
                             let closedEmbed = new MessageEmbed()
-                                .setAuthor({ name: `${interaction.user.username} encerrou o seu canal de atendimento!`, iconURL: interaction.user.displayAvatarURL() })
+                                .setAuthor({ name: `${interaction.user.username} encerrou seu canal de suporte.`, iconURL: interaction.user.displayAvatarURL() })
                                 .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                                 .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })
                                 .setTimestamp();

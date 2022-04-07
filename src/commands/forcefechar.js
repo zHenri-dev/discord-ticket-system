@@ -39,7 +39,7 @@ module.exports = class Forcefechar {
                     if (user) {
                         tag = user.tag;
                         let closedEmbed = new MessageEmbed()
-                            .setAuthor({ name: `${message.author.username} encerrou o seu canal de atendimento!`, iconURL: message.author.displayAvatarURL() })
+                            .setAuthor({ name: `${message.author.username} encerrou seu canal de suporte.`, iconURL: message.author.displayAvatarURL() })
                             .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                             .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })
                             .setTimestamp();
