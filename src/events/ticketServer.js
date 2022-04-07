@@ -13,8 +13,23 @@ module.exports = class {
             if (!message.guild || message.author.bot === true || message.guild.id != this.client.ticketConfig.centralGuildId) return;
             let ticket = await this.client.database.tickets.findOne({ channelId: message.channel.id, closed: false });
             if (ticket) {
+                let closeRow = new MessageActionRow().addComponents(
+                    new MessageButton()
+                        .setCustomId(`close-${message.channel.id}`)
+                        .setStyle("DANGER")
+                        .setLabel("Encerrar o atendimento."),
+                );
+
                 let user = await this.client.users.cache.get(ticket.userId);
-                if (!user) return message.channel.delete().catch(() => { });
+                if (!user) {
+                    message.delete().catch(() => { });
+                    let errorEmbed = new MessageEmbed()
+                        .setAuthor({name: `${message.author.username} não foi possível encontrar o membro!`, iconURL: message.author.displayAvatarURL()})
+                        .setDescription(`O membro pode ter saído do discord principal ou sua conta pode ter sido desativada e não foi possível se comunicar com o membro.`)
+                        .setColor(this.client.ticketConfig.errorColor);
+                    message.channel.send({ embeds: [errorEmbed], components: [closeRow] }).catch(() => {});
+                    return;
+                }
                 if (message.content && message.content.startsWith("&")) return;
                 if (message.content && message.content.startsWith("//")) {
                     let commentContent = message.content.substring(2);
@@ -46,12 +61,20 @@ module.exports = class {
                     .setAuthor({ name: `${message.author.username} enviou uma mensagem!`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`${messageContent}`);
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
-                user.send({ embeds: [messageEmbed] }).catch(() => { });
-                message.channel.send({embeds: [messageEmbed]}).catch(() => { });
-                message.delete().catch(() => { });
-                ticket.lastResponceUserId = message.author.id;
-                ticket.lastResponceAt = new Date().getTime();
-                ticket.save();
+                await user.send({ embeds: [messageEmbed] }).then(() => {
+                    message.channel.send({embeds: [messageEmbed]}).catch(() => { });
+                }).catch(() => {
+                    let errorEmbed = new MessageEmbed()
+                        .setAuthor({name: `${message.author.username} ocorreu um erro ao enviar a mensagem!`, iconURL: message.author.displayAvatarURL()})
+                        .setDescription(`O membro desativou o recebimentos de mensagens privadas ou bloqueou o bot\ne não foi possível se comunicar com o membro.`)
+                        .setColor(this.client.ticketConfig.errorColor);
+                    message.channel.send({ embeds: [errorEmbed], components: [closeRow] }).catch(() => {});
+                }).finally(() => {
+                    message.delete().catch(() => { });
+                    ticket.lastResponceUserId = message.author.id;
+                    ticket.lastResponceAt = new Date().getTime();
+                    ticket.save();
+                });
             }
         } catch (error) {
             if (error) console.error(error);
