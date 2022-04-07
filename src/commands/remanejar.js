@@ -70,7 +70,7 @@ module.exports = class Remanejar {
                             ticket.history.push({ string: `**${message.author.tag}** remanejou este canal de suporte. [%highEmoji%]`, createdAt: new Date().getTime() });
                             ticket.save();
                             this.client.functions.updateTicketHistory(ticket);
-                            if (user) user.send({embeds: [userEmbed]});
+                            if (user) user.send({ embeds: [userEmbed] }).catch(() => { });
                             break;
                         case "remanejar-low":
                             i.message.channel.setParent(this.client.ticketConfig.lowParentId);
@@ -78,7 +78,7 @@ module.exports = class Remanejar {
                             ticket.history.push({ string: `**${message.author.tag}** remanejou este canal de suporte. [%lowEmoji%]`, createdAt: new Date().getTime() });
                             ticket.save();
                             this.client.functions.updateTicketHistory(ticket);
-                            if (user) user.send({embeds: [userEmbed]});
+                            if (user) user.send({ embeds: [userEmbed] }).catch(() => { });
                             break;
                         case "remanejar-close":
                             i.message.delete().catch(() => { });

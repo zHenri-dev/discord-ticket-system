@@ -26,7 +26,7 @@ module.exports = class {
                 else if (commandName.length == 0) return
 
                 command = this.client.commands.get(commandName) || this.client.commands.get(this.client.aliases.get(commandName))
-                if (command) try {  command.run({ message, args }); } catch (error) { console.log(error); console.log(`\x1b[91m[Commands] Ocorreu um erro ao executar o comando ${commandName}.\x1b[0m`) }
+                if (command) try { command.run({ message, args }); } catch (error) { console.log(error); console.log(`\x1b[91m[Commands] Ocorreu um erro ao executar o comando ${commandName}.\x1b[0m`) }
             }
         } catch (error) {
             if (error) console.error(error);

@@ -55,7 +55,7 @@ module.exports = class {
                     .setTitle("Aguarde!")
                     .setDescription(`Estamos preparando um lugar confortável para seu canal de\natendimento. Este processo pode demorar alguns segundos!`)
                     .setThumbnail(`https://i.imgur.com/PC6QhJJ.png`)
-                message.channel.send({ embeds: [waitingEmbed] });
+                message.channel.send({ embeds: [waitingEmbed] }).catch(() => { });
                 let category = this.client.categories["otherproblems"];
                 let userSelect = this.client.selects.find(select => select.userId == message.author.id);
                 if (userSelect) {

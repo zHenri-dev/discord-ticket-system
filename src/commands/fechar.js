@@ -36,7 +36,7 @@ module.exports = class Fechar {
                     this.client.database.cooldowns.create({
                         userId: user.id,
                         time: new Date().getTime() + this.client.ticketConfig.cooldownAfterClose // 3 hours
-                     });
+                    });
                 }
                 await this.client.database.histories.create({
                     string: `**${message.author.tag}** encerrou o canal de **${tag}**.`,
