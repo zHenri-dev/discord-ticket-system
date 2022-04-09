@@ -27,8 +27,11 @@ module.exports = class Fechar {
                 let tag = "Desconhecido";
                 if (user) {
                     tag = user.tag;
+                    let userObject = await this.client.database.users.findOne({ userId: message.author.id });
+                    let anonymous = false;
+                    if (userObject && userObject.profile && userObject.anonymous) anonymous = true;
                     let closedEmbed = new MessageEmbed()
-                        .setAuthor({ name: `${message.author.username} encerrou seu canal de suporte.`, iconURL: message.author.displayAvatarURL() })
+                        .setAuthor({ name: `${anonymous ? message.author.username : "Um membro da equipe"} encerrou seu canal de suporte.`, iconURL: `${anonymous ? message.author.displayAvatarURL() : "https://i.imgur.com/cSqp77S.png"}` })
                         .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                         .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })
                         .setTimestamp();
