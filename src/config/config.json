@@ -3,7 +3,7 @@
     "token": "",
     "databaseString": "",
     "ticketConfig": {
-        "currentDay": 8,
+        "currentDay": 9,
         "maxTickets": 100,
         "cooldownAfterClose": 10800000,
         "ticketInactiveTime": 300000,

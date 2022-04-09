@@ -47,6 +47,18 @@ module.exports = class Functions {
         }
     }
 
+    async checkCooldowns() {
+        try {
+            let cooldowns = await this.client.database.cooldowns.find({});
+            cooldowns.forEach(async cooldown => {
+                if (cooldown.time <= new Date().getTime()) cooldown.delete();
+            });
+        } catch (error) {
+            console.log(error);
+            console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função checkCooldowns \x1b[0m`);
+        }
+    }
+
     async updateMessages() {
         try {
             let messages = await this.client.database.messages.find({});
@@ -123,7 +135,7 @@ module.exports = class Functions {
         }
     }
 
-    async getRemainingTime(time) {
+    async getFormatedTime(time) {
         try {
             time = parseInt(time);
             if (!time) return undefined;
@@ -144,7 +156,16 @@ module.exports = class Functions {
             return returnString;
         } catch (error) {
             console.log(error);
-            console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função getRemainingTime \x1b[0m`);
+            console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função getFormatedTime \x1b[0m`);
+        }
+    }
+
+    async getUsedMemory() {
+        try {
+            return Math.round((process.memoryUsage().heapUsed / 1024 / 1024) * 100) / 100;
+        } catch (error) {
+            console.log(error);
+            console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função getUsedMemory \x1b[0m`);
         }
     }
 };

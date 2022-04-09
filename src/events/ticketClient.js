@@ -33,7 +33,7 @@ module.exports = class {
                         let cooldownEmbed2 = new MessageEmbed()
                             .setTitle("Criação temporariamente proibida!")
                             .setURL(`https://discord.com/channels/@me/${this.client.user.id}`)
-                            .setDescription(`** Isso acontece com todos os membros que criaram tickets recentemente por conta de um tempo de espera estabelecido.**\n\n A criação do seu ticket foi bloqueada porque você criou um recentemente.\n É necessário esperar ainda \`${await this.client.functions.getRemainingTime(cooldown.time - new Date().getTime())}\` para criar outro ticket, tente novamente após o término de seu tempo de espera.`)
+                            .setDescription(`** Isso acontece com todos os membros que criaram tickets recentemente por conta de um tempo de espera estabelecido.**\n\n A criação do seu ticket foi bloqueada porque você criou um recentemente.\n É necessário esperar ainda \`${await this.client.functions.getFormatedTime(cooldown.time - new Date().getTime())}\` para criar outro ticket, tente novamente após o término de seu tempo de espera.`)
                             .setFooter({ text: `Lembrando que, a criação de tickets de forma maliciosa e fútil pode resultar em punição!` })
                         message.reply({ embeds: [cooldownEmbed2], allowedMentions: { repliedUser: false } }).catch(() => { });
                         return;
