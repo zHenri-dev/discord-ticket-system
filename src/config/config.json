@@ -3,11 +3,11 @@
     "token": "",
     "databaseString": "",
     "ticketConfig": {
-        "currentDay": 6,
+        "currentDay": 8,
         "maxTickets": 100,
         "cooldownAfterClose": 10800000,
         "ticketInactiveTime": 300000,
-        "historyLength": 4,
+        "historyLength": 2,
         "emojiName": "📬",
         "mainGuildId": "856724080375103498",
         "centralGuildId": "890051931974828123",
