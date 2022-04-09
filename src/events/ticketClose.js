@@ -9,13 +9,15 @@ module.exports = class {
     async run(interaction) {
         try {
             if (interaction.customId.startsWith("close-") && interaction.customId.replace("close-", "") == interaction.message.channelId) {
+                try { interaction.message.components[0].components[0].setDisabled(true); } catch { }
+                interaction.message.edit({ embeds: interaction.message.embeds, components: interaction.message.components }).catch(() => { });
                 let closingEmbed = new MessageEmbed()
                     .setAuthor({ name: `${interaction.user.username} solicitou o encerramento deste canal de suporte!`, iconURL: `https://i.imgur.com/kLw1M7i.png` })
                     .setDescription(`Esta ação não pode ser revertida, estamos encerrando este canal de atendimento e o membro receberá um cooldown para a criação de novos canais de suporte.`)
                 interaction.reply({ embeds: [closingEmbed] }).catch(() => { });
                 setTimeout(async () => {
                     let ticket = await this.client.database.tickets.findOne({ channelId: interaction.message.channelId, closed: false });
-                    interaction.message.channel.delete().catch(() => { });
+                    if (interaction.message.channel) interaction.message.channel.delete().catch(() => { });
                     if (ticket) {
                         ticket.closed = true;
                         ticket.save();

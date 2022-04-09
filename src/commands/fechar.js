@@ -20,7 +20,7 @@ module.exports = class Fechar {
                 .setDescription(`Esta ação não pode ser revertida, estamos encerrando este canal de atendimento e o membro receberá um cooldown para a criação de novos canais de suporte.`)
             message.reply({ embeds: [closingEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
             setTimeout(async () => {
-                message.channel.delete().catch(() => { });
+                if (message.channel) message.channel.delete().catch(() => { });
                 ticket.closed = true;
                 ticket.save();
                 let user = await this.client.users.cache.get(ticket.userId);

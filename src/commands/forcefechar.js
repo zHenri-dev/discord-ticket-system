@@ -30,7 +30,7 @@ module.exports = class Forcefechar {
             channel.send({ embeds: [closingEmbed] }).catch(() => { });
             message.delete().catch(() => { });
             setTimeout(async () => {
-                channel.delete().catch(() => { });
+                if (channel) channel.delete().catch(() => { });
                 if (ticket) {
                     ticket.closed = true;
                     ticket.save();
