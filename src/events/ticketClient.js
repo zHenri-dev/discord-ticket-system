@@ -105,9 +105,7 @@ module.exports = class {
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 let sentEmbed = new MessageEmbed()
-                    .setTitle("Recebemos sua mensagem!")
-                    .setDescription(`Acabamos de receber sua mensagem **${message.author.username}**, você receberá uma\nresposta de nossos atendentes atráves deste canal.`)
-                    .setThumbnail("https://i.imgur.com/sKQqcnD.png");
+                    .setTitle(`${this.client.customEmojis.messages}⠀Nossa equipe de atendimento acabou de receber esta mensagem!`);
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                 this.client.functions.updateMessages();
             } else {
@@ -142,9 +140,8 @@ module.exports = class {
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 let sentEmbed = new MessageEmbed()
-                    .setTitle("Recebemos sua mensagem!")
-                    .setDescription(`Acabamos de receber sua mensagem **${message.author.username}**, você receberá uma\nresposta de nossos atendentes atráves deste canal.`)
-                    .setThumbnail("https://i.imgur.com/sKQqcnD.png");
+                    .setTitle(`${this.client.customEmojis.messages}⠀Nossa equipe de atendimento acabou de receber esta mensagem!`)
+                    .setFooter({ text: "Lembrando, você receberá a resposta de nossos atendentes por aqui mesmo. Quaisquer outras informações adicionais ou arquivos podem ser enviados a quaisquer momentos." });
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
             }
         } catch (error) {

@@ -56,7 +56,7 @@ module.exports = class {
                         }
                         let successEmbed = new MessageEmbed()
                             .setTitle("Canal de suporte classificado com sucesso!")
-                            .setDescription("⠀\nTodas as mensagens enviadas neste canal serão redirecionadas aos atendentes\nresponsáveis pela categoria que você o escolheu.")
+                            .setDescription("Todas as mensagens enviadas neste canal serão redirecionadas aos atendentes\nresponsáveis pela categoria que você o escolheu.")
                             .setFooter({ text: `${category.name}` })
                             .setColor(this.client.ticketConfig.selectedColor);
                         categorySelector.reply({ embeds: [successEmbed] }).catch(() => { });

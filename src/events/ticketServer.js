@@ -25,7 +25,7 @@ module.exports = class {
                     message.delete().catch(() => { });
                     let errorEmbed = new MessageEmbed()
                         .setAuthor({ name: `${message.author.username} não foi possível encontrar o membro!`, iconURL: message.author.displayAvatarURL() })
-                        .setDescription(`O membro pode ter saído do discord principal ou sua conta pode ter sido desativada e não foi possível se comunicar com o membro.`)
+                        .setDescription(`O membro pode ter saído do discord principal ou sua conta pode ter sido desativada.`)
                         .setColor(this.client.ticketConfig.errorColor);
                     message.channel.send({ embeds: [errorEmbed], components: [closeRow] }).catch(() => { });
                     return;
@@ -66,7 +66,7 @@ module.exports = class {
                 }).catch(() => {
                     let errorEmbed = new MessageEmbed()
                         .setAuthor({ name: `${message.author.username} ocorreu um erro ao enviar a mensagem!`, iconURL: message.author.displayAvatarURL() })
-                        .setDescription(`O membro desativou o recebimentos de mensagens privadas ou bloqueou o bot\ne não foi possível se comunicar com o membro.`)
+                        .setDescription(`O membro desativou o recebimentos de mensagens privadas ou bloqueou o bot.`)
                         .setColor(this.client.ticketConfig.errorColor);
                     message.channel.send({ embeds: [errorEmbed], components: [closeRow] }).catch(() => { });
                 }).finally(() => {
