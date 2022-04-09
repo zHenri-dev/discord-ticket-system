@@ -41,6 +41,16 @@ module.exports = class {
                             createdAt: new Date().getTime(),
                         });
                     }
+                    let closerUser = await this.client.database.users.findOne({ userId: interaction.user.id });
+                    if (closerUser) {
+                        closerUser.closedTickets++;
+                        closerUser.save();
+                    } else {
+                        closerUser = await this.client.database.users.create({
+                            userId: interaction.user.id,
+                            closedTickets: 1
+                        });
+                    }
                     this.client.functions.updateMessages();
                 }, 7000);
             }

@@ -98,11 +98,29 @@ module.exports = class Functions {
                 if (history) historyString += `\n\`[${moment(history.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${history.string}`
             }
             let remain = histories.length - this.client.ticketConfig.historyLength;
-            if (remain > 0) historyString += `\n[+${remain} alterações feitas nas últimas 24 horas.](https://discord.com/channels/${this.client.ticketConfig.mainGuildId}/)`
+            if (remain > 0) historyString += `\n[+${remain} ações realizadas neste canal anteriormente.](https://discord.com/channels/${this.client.ticketConfig.mainGuildId}/)`
             return historyString;
         } catch (error) {
             console.log(error);
             console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função getGlobalHistory \x1b[0m`);
+        }
+    }
+
+    async getProfileHistory(histories) {
+        try {
+            let historyString = "";
+            if (histories.length == 0) return "\n⠀Nenhuma ação feita recentemente.";
+            histories.sort((a, b) => { return new Date(b.createdAt) - new Date(a.createdAt) });
+            for (let x = 0; x < this.client.ticketConfig.historyLength; x++) {
+                let history = histories[x];
+                if (history) historyString += `\n\`[${moment(history.createdAt).format(`DD/MM [às] HH:mm`)}]\` ${history.string}`
+            }
+            let remain = histories.length - this.client.ticketConfig.historyLength;
+            if (remain > 0) historyString += `\n[+${remain} alterações foram realizadas anteriormente.](https://discord.com/channels/${this.client.ticketConfig.centralGuildId}/)`
+            return historyString;
+        } catch (error) {
+            console.log(error);
+            console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função getProfileHistory \x1b[0m`);
         }
     }
 

@@ -51,34 +51,23 @@ module.exports = class Remanejar {
             collector.on("collect", async i => {
                 i.deferUpdate();
                 if (i.customId == "remanejar-select") {
-                    let id = i.values[0];
-                    if (!id) return;
-                    let successEmbed = new MessageEmbed()
-                        .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
-                        .setDescription(`Mais informações sobre este remanejamento estão fixadas na primeira mensagem\ndo canal. O histórico do canal de suporte não pode ser alterado!`);
-                    let userEmbed = new MessageEmbed()
-                        .setAuthor({ name: `Este canal foi remanejado por ${message.author.username} em ${moment().format('LL')}.` })
-                        .setDescription("Seu canal de atendimento foi remanejado para que você seja atendido pelos membros setor responsável pelo seu problema.\n")
-                        .setThumbnail("https://i.imgur.com/xCHdk0w.png")
-                        .setFooter({ text: `Não é necessário informar seu problema novamente, todo seu histórico de mensagens entre você e os atendentes foram repassados!` })
-                        .setTimestamp();
-                    let user = await this.client.users.cache.get(ticket.userId);
-                    switch (id) {
+                    if (!i.values[0]) return;
+                    switch (i.values[0]) {
                         case "remanejar-high":
-                            i.message.channel.setParent(this.client.ticketConfig.highParentId);
-                            message.reply({ embeds: [successEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
-                            ticket.history.push({ string: `**${message.author.tag}** remanejou este canal de suporte. [%highEmoji%]`, createdAt: new Date().getTime() });
-                            ticket.save();
-                            this.client.functions.updateTicketHistory(ticket);
-                            if (user) user.send({ embeds: [userEmbed] }).catch(() => { });
-                            break;
                         case "remanejar-low":
-                            i.message.channel.setParent(this.client.ticketConfig.lowParentId);
-                            message.reply({ embeds: [successEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
-                            ticket.history.push({ string: `**${message.author.tag}** remanejou este canal de suporte. [%lowEmoji%]`, createdAt: new Date().getTime() });
+                            i.message.channel.setParent(`${i.values[0] == "remanejar-high" ? this.client.ticketConfig.highParentId : this.client.ticketConfig.lowParentId}`);
+                            ticket.history.push({ string: `**${message.author.tag}** remanejou este canal de suporte. [${i.values[0] == "remanejar-high" ? "%highEmoji%" : "%lowEmoji%"}]`, createdAt: new Date().getTime() });
                             ticket.save();
                             this.client.functions.updateTicketHistory(ticket);
-                            if (user) user.send({ embeds: [userEmbed] }).catch(() => { });
+                            let successEmbed = new MessageEmbed()
+                                .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
+                                .setDescription(`Mais informações sobre este remanejamento estão fixadas na primeira mensagem\ndo canal. O histórico do canal de suporte não pode ser alterado!`);
+                            let successMessage = await message.reply({ embeds: [successEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
+                            setTimeout(() => {
+                                successMessage.delete().catch(() => { });
+                                selectNewCategoryMenu.delete().catch(() => { });
+                                message.delete().catch(() => { });
+                            }, 5000);
                             break;
                         case "remanejar-close":
                             i.message.delete().catch(() => { });

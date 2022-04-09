@@ -38,6 +38,16 @@ module.exports = class Fechar {
                         time: new Date().getTime() + this.client.ticketConfig.cooldownAfterClose // 3 hours
                     });
                 }
+                let closerUser = await this.client.database.users.findOne({ userId: message.author.id });
+                if (closerUser) {
+                    closerUser.closedTickets++;
+                    closerUser.save();
+                } else {
+                    closerUser = await this.client.database.users.create({
+                        userId: message.author.id,
+                        closedTickets: 1
+                    });
+                }
                 await this.client.database.histories.create({
                     string: `**${message.author.tag}** encerrou o canal de **${tag}**.`,
                     createdAt: new Date().getTime(),

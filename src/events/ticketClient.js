@@ -133,9 +133,12 @@ module.exports = class {
                     .setAuthor({ name: `${message.author.username} enviou uma mensagem!`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`${messageContent}`);
                 let lastResponceUser = await this.client.users.cache.get(ticket.lastResponceUserId);
-                if (lastResponceUser && ticket.lastResponceAt + this.client.ticketConfig.ticketInactiveTime <= new Date().getTime()) {
+                let lastResponceUserObject = await this.client.database.users.findOne({ userId: message.author.id });
+                let ticketInactiveTime = this.client.ticketConfig.ticketInactiveTime;
+                if (lastResponceUserObject && lastResponceUserObject.profile && lastResponceUserObject.profile.ticketInactiveTime) ticketInactiveTime = lastResponceUserObject.profile.ticketInactiveTime;
+                if (lastResponceUser && ticket.lastResponceAt + ticketInactiveTime <= new Date().getTime()) {
                     channel.send({ content: `${lastResponceUser}` }).then(msg => { msg.delete().catch(() => { }) }).catch(() => { });
-                    messageEmbed.setFooter({ text: `${lastResponceUser.username} foi notificado do envio desta mensagem!`, iconURL: "https://i.imgur.com/Aatgi3x.png" })
+                    messageEmbed.setFooter({ text: `${lastResponceUser.username} acabou de ser notificado(a) do envio desta mensagem.`, iconURL: "https://i.imgur.com/Aatgi3x.png" })
                 }
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });

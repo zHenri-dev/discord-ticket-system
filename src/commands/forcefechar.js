@@ -50,6 +50,16 @@ module.exports = class Forcefechar {
                         createdAt: new Date().getTime(),
                     });
                 }
+                let closerUser = await this.client.database.users.findOne({ userId: message.author.id });
+                if (closerUser) {
+                    closerUser.closedTickets++;
+                    closerUser.save();
+                } else {
+                    closerUser = await this.client.database.users.create({
+                        userId: message.author.id,
+                        closedTickets: 1
+                    });
+                }
                 this.client.functions.updateMessages();
             }, 7000);
         } catch (error) {

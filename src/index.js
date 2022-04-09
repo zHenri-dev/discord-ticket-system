@@ -10,7 +10,8 @@ const config = require("./config/config.json"),
 const Ticket = require("./database/schemas/ticket.js"),
     Message = require("./database/schemas/message.js"),
     History = require("./database/schemas/history.js"),
-    Cooldown = require("./database/schemas/cooldown.js");
+    Cooldown = require("./database/schemas/cooldown.js"),
+    User = require("./database/schemas/user.js");
 
 class TicketSystemClient extends Client {
     constructor(options) {
@@ -30,6 +31,7 @@ class TicketSystemClient extends Client {
         this.database.messages = Message;
         this.database.histories = History;
         this.database.cooldowns = Cooldown;
+        this.database.users = User;
     }
 
     start() {
