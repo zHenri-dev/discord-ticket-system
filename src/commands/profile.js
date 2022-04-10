@@ -120,7 +120,7 @@ module.exports = class Profile {
                                 profileMessage.edit({ content: `**${this.client.customEmojis.settings} Editando as configurações secundárias das notificações.**`, embeds: [secondMentionEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                                 profileMessage.reactions.removeAll().catch(() => { });
                                 const secondMentionFilter = (m) => m.author.id == message.author.id;
-                                const secondCollector = profileMessage.channel.createMessageCollector({ filter: secondMentionFilter, time: 60000});
+                                const secondCollector = profileMessage.channel.createMessageCollector({ filter: secondMentionFilter, time: 60000 });
                                 secondCollector.on("collect", m => {
                                     if (!m.content) return;
                                     let number = parseInt(m.content);
@@ -135,7 +135,7 @@ module.exports = class Profile {
                                         let successMentionsEmbed = new MessageEmbed()
                                             .setDescription(`O tempo inativo de você ser notficado foi alterado para: **${number} minuto(s)**`)
                                             .setFooter({ text: "Caso queira reverter esta configuração que acabou de ser aplicada, basta usar o comando novamente e seguir o mesmo procedimento informando o tempo anterior.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
-                                        profileMessage.edit({embeds: [successMentionsEmbed]}).catch(() => { });
+                                        profileMessage.edit({ embeds: [successMentionsEmbed] }).catch(() => { });
                                         secondCollector.stop();
                                     }
                                 });

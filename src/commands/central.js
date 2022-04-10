@@ -16,7 +16,7 @@ module.exports = class Central {
                 .setFooter({ text: "Todas as ações realizadas neste sistema são reversíveis embora possam afetar todos os usuários que tentem usar ou estejam usando a central de suporte.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
             message.reply({ embeds: [centralEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
             const filter = m => m.author.id == message.author.id;
-            const collector = message.channel.createMessageCollector({filter, time: 60000, max: 1});
+            const collector = message.channel.createMessageCollector({ filter, time: 60000, max: 1 });
             collector.on("collect", m => {
                 if (!m.content) return;
                 switch (m.content.toLowerCase()) {
@@ -28,9 +28,9 @@ module.exports = class Central {
                     case "02":
                     case "2":
                     case "[02]":
-                       //option 2 here
+                        //option 2 here
                         break;
-                } 
+                }
             });
         } catch (error) {
             console.log(error);
