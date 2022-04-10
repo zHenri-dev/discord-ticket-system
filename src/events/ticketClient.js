@@ -51,16 +51,24 @@ module.exports = class {
                     message.reply({ embeds: [maxTicketsEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                     return;
                 }
+                let category = undefined;
+                let userSelect = this.client.selects.find(select => select.userId == message.author.id);
+                if (userSelect) category = this.client.categories[userSelect.category]
+                else {
+                    let messageObject = (await this.client.database.messages.find({}))[0];
+                    if (messageObject) {
+                        let noSelectionEmbed = new MessageEmbed()
+                            .setTitle(`É necessário classificar seu canal de suporte.`)
+                            .setDescription(`Anteriormente você criou um canal de suporte sem nenhuma classificação, entretanto agora é necessário.\n\n[${this.client.customEmojis.paperplane} Clique na reação desta mensagem e prossiga com a classificação.](https://discord.com/channels/${messageObject.guildId}/${messageObject.channelId}/${messageObject.messageId})`);
+                        message.channel.send({ embeds: [noSelectionEmbed] }).catch(() => { });
+                        return;
+                    }
+                }
                 let waitingEmbed = new MessageEmbed()
                     .setTitle("Aguarde!")
-                    .setDescription(`Estamos preparando um lugar confortável para seu canal de\natendimento. Este processo pode demorar alguns segundos!`)
+                    .setDescription(`Estamos preparando um lugar confortável para seu canal de atendimento. Este processo pode demorar alguns segundos!`)
                     .setThumbnail(`https://i.imgur.com/PC6QhJJ.png`)
                 message.channel.send({ embeds: [waitingEmbed] }).catch(() => { });
-                let category = this.client.categories["otherproblems"];
-                let userSelect = this.client.selects.find(select => select.userId == message.author.id);
-                if (userSelect) {
-                    category = this.client.categories[userSelect.category]
-                }
                 let parent = this.client.ticketConfig.lowParentId;
                 if (category.high) parent = this.client.ticketConfig.highParentId;
                 let channel = await central.channels.create(`0${message.author.discriminator}${ticketCount + 1}`, { parent, topic: category.name }).catch((error) => { console.log(error); console.log(`\x1b[91m[TicketClient] Ocorreu um erro ao criar o ticket do membro ${message.author.tag} \x1b[0m`); })

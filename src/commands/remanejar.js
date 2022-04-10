@@ -19,7 +19,7 @@ module.exports = class Remanejar {
             }
             let selectNewCategoryEmbed = new MessageEmbed()
                 .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
-                .setDescription(`Após confirmar o remanejamento do canal, esta informação ficará vinculada no\ncanal até o seu encerramento.`)
+                .setDescription(`Após confirmar o remanejamento do canal, esta informação ficará vinculada no canal até o seu encerramento.`)
             let row = new MessageActionRow().addComponents(
                 new MessageSelectMenu()
                     .setCustomId(`remanejar-select`)
@@ -61,7 +61,7 @@ module.exports = class Remanejar {
                             this.client.functions.updateTicketHistory(ticket);
                             let successEmbed = new MessageEmbed()
                                 .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
-                                .setDescription(`Mais informações sobre este remanejamento estão fixadas na primeira mensagem\ndo canal. O histórico do canal de suporte não pode ser alterado!`);
+                                .setDescription(`Mais informações sobre este remanejamento estão fixadas na primeira mensagem do canal. O histórico do canal de suporte não pode ser alterado!`);
                             let successMessage = await message.reply({ embeds: [successEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                             setTimeout(() => {
                                 successMessage.delete().catch(() => { });

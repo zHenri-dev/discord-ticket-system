@@ -20,9 +20,14 @@ module.exports = class {
                     let message = await channel.messages.fetch(data.d.message_id).catch(() => { });
                     if (!message) return;
                     (await message.reactions.cache.get(this.client.ticketConfig.emojiName)).users.remove(data.d.user_id);
+                    let creatingEmbed = new MessageEmbed()
+                        .setTitle("Criando seu ticket.")
+                        .setDescription("Pedimos que você redirecione-se as suas mensagens privadas onde estaremos enviando mas informações.")
+                        .setImage("https://minecraftskinstealer.com/achievement/35/Converse+conosco./Confira+seu+privado!");
+                    message.channel.send({ embeds: [creatingEmbed] }).then(msg => { setTimeout(() => { msg.delete().catch(() => { }) }, 5000); }).catch(() => { });
                     let categorySelectorEmbed = new MessageEmbed()
                         .setAuthor({ name: `${user.username}`, iconURL: user.displayAvatarURL() })
-                        .setDescription(`Escolha dentre as categorias abaixo para classificar seu atendimento, é possível\npular este processo enviando uma mensagem neste canal com seu problema!`)
+                        .setDescription(`Escolha dentre as categorias abaixo para classificar seu atendimento, é possível pular este processo enviando uma mensagem neste canal com seu problema!`)
                     let options = [];
                     for (let category in this.client.categories) {
                         let categoryOptions = this.client.categories[category];
@@ -56,7 +61,7 @@ module.exports = class {
                         }
                         let successEmbed = new MessageEmbed()
                             .setTitle("Canal de suporte classificado com sucesso!")
-                            .setDescription("⠀\nTodas as mensagens enviadas neste canal serão redirecionadas aos atendentes\nresponsáveis pela categoria que você o escolheu.")
+                            .setDescription("⠀\nTodas as mensagens enviadas neste canal serão redirecionadas aos atendentes responsáveis pela categoria que você o escolheu.")
                             .setFooter({ text: `${category.name}` })
                             .setColor(this.client.ticketConfig.selectedColor);
                         categorySelector.reply({ embeds: [successEmbed] }).catch(() => { });
