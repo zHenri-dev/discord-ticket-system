@@ -63,7 +63,7 @@ class TicketSystemClient extends Client {
             }
         })
         let finishedAt = performance.now();
-        let time = (parseFloat(finishedAt - startedAt).toFixed(2)).replace(".00", "");
+        let time = (finishedAt - startedAt).toFixed(2).replace(".00", "");
         console.log(`\x1b[32m[Commands] Foram carregados ${commandsCount} comandos em ${time}ms\x1b[0m`);
     }
 
@@ -82,7 +82,7 @@ class TicketSystemClient extends Client {
             }
         });
         let finishedAt = performance.now();
-        let time = (parseFloat(finishedAt - startedAt).toFixed(2)).replace(".00", "");
+        let time = (finishedAt - startedAt).toFixed(2).replace(".00", "");
         console.log(`\x1b[32m[Events] Foram carregados ${eventsCount} eventos em ${time}ms\x1b[0m`);
     }
 }
