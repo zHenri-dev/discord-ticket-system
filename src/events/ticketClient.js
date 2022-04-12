@@ -113,7 +113,7 @@ module.exports = class {
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 let sentEmbed = new MessageEmbed()
-                    .setTitle(`${this.client.customEmojis.messages}⠀Nossa equipe de atendimento acabou de receber esta mensagem!`);
+                    .setTitle(`${this.client.customEmojis.messages}⠀Recebemos essa mensagem!`);
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
                 this.client.functions.updateMessages();
             } else {
@@ -151,7 +151,7 @@ module.exports = class {
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 let sentEmbed = new MessageEmbed()
-                    .setTitle(`${this.client.customEmojis.messages}⠀Nossa equipe de atendimento acabou de receber esta mensagem!`);
+                    .setTitle(`${this.client.customEmojis.messages}⠀Recebemos essa mensagem!`);
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
             }
         } catch (error) {
