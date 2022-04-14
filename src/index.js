@@ -35,6 +35,7 @@ class TicketSystemClient extends Client {
     }
 
     start() {
+        this.functions.sendWebhookMessage(`<@343542664215658496> iniciando a instância do seu bot...`);
         this.login(this.config.token);
         connectDatabase();
         this.loadCommands();
