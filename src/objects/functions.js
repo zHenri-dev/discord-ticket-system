@@ -187,17 +187,4 @@ module.exports = class Functions {
             console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função getUsedMemory \x1b[0m`);
         }
     }
-
-    async sendWebhookMessage(message) {
-        try {
-            await fetch(this.client.config.webhook, {
-                method: "POST",
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({ content: `${message}` })
-            }).catch(() => { });
-        } catch (error) {
-            console.log(error);
-            console.log(`\x1b[91m[Functions] Ocorreu um erro ao executar a função sendWebhookMessage \x1b[0m`);
-        }
-    }
 };

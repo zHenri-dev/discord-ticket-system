@@ -4,7 +4,7 @@
     "databaseString": "",
     "webhook": "",
     "ticketConfig": {
-        "currentDay": 14,
+        "currentDay": 15,
         "maxTickets": 100,
         "cooldownAfterClose": 10800000,
         "ticketInactiveTime": 300000,

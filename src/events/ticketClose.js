@@ -29,7 +29,7 @@ module.exports = class {
                             if (userObject && userObject.profile && userObject.anonymous) anonymous = true;
                             tag = user.tag;
                             let closedEmbed = new MessageEmbed()
-                                .setAuthor({ name: `${anonymous ? interaction.user.username : "Um membro da equipe"} encerrou seu canal de suporte.`, iconURL: `${anonymous ? interaction.user.displayAvatarURL() : "https://i.imgur.com/cSqp77S.png"}` })
+                                .setAuthor({ name: `${!anonymous ? interaction.user.username : "Um membro da equipe"} encerrou seu canal de suporte.`, iconURL: `${!anonymous ? interaction.user.displayAvatarURL() : "https://i.imgur.com/cSqp77S.png"}` })
                                 .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                                 .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })
                                 .setTimestamp();

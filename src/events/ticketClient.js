@@ -99,19 +99,20 @@ module.exports = class {
                     createdAt: new Date().getTime(),
                 });
                 this.client.selects = this.client.selects.filter(select => select.userId != message.author.id)
-                let messageContent = "Mensagem sem conteúdo.";
-                if (message.content) messageContent = message.content;
-                let attachments = "";
                 message.attachments.forEach(attachment => {
-                    if (attachments == "") attachments += `\n\n[\`[${attachment.name}]\`](${attachment.url})`
-                    else attachments += `\n[\`[${attachment.name}]\`](${attachment.url})`
+                    let attachmentEmbed = new MessageEmbed()
+                        .setTitle(`${this.client.customEmojis.folder} Este arquivo foi enviado por ${message.author.username} para a central.`)
+                        .setURL(attachment.url)
+                        .setImage(attachment.url)
+                        .setFooter({ text: `Nome do arquivo: ${attachment.name}` });
+                    channel.send({ embeds: [attachmentEmbed] }).catch(() => { });
                 });
-                messageContent += attachments;
-                let messageEmbed = new MessageEmbed()
-                    .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
-                    .setDescription(`${messageContent}`);
-                if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
-                channel.send({ embeds: [messageEmbed] }).catch(() => { });
+                if (message.content) {
+                    let messageEmbed = new MessageEmbed()
+                        .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
+                        .setDescription(`${message.content}`);
+                    channel.send({ embeds: [messageEmbed] }).catch(() => { });
+                }
                 let sentEmbed = new MessageEmbed()
                     .setTitle(`${this.client.customEmojis.messages}⠀Recebemos essa mensagem!`);
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -129,27 +130,28 @@ module.exports = class {
                     this.client.functions.updateMessages();
                     return;
                 }
-                let messageContent = "Mensagem sem conteúdo.";
-                if (message.content) messageContent = message.content;
-                let attachments = "";
                 message.attachments.forEach(attachment => {
-                    if (attachments == "") attachments += `\n\n[\`[${attachment.name}]\`](${attachment.url})`
-                    else attachments += `\n[\`[${attachment.name}]\`](${attachment.url})`
+                    let attachmentEmbed = new MessageEmbed()
+                        .setTitle(`${this.client.customEmojis.folder} Este arquivo foi enviado por ${message.author.username} para a central.`)
+                        .setURL(attachment.url)
+                        .setImage(attachment.url)
+                        .setFooter({ text: `Nome do arquivo: ${attachment.name}` });
+                    channel.send({ embeds: [attachmentEmbed] }).catch(() => { });
                 });
-                messageContent += attachments;
-                let messageEmbed = new MessageEmbed()
-                    .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
-                    .setDescription(`${messageContent}`);
-                let lastResponceUser = await this.client.users.cache.get(ticket.lastResponceUserId);
-                let lastResponceUserObject = await this.client.database.users.findOne({ userId: message.author.id });
-                let ticketInactiveTime = this.client.ticketConfig.ticketInactiveTime;
-                if (lastResponceUserObject && lastResponceUserObject.profile && lastResponceUserObject.profile.ticketInactiveTime) ticketInactiveTime = lastResponceUserObject.profile.ticketInactiveTime;
-                if (lastResponceUser && ticket.lastResponceAt + ticketInactiveTime <= new Date().getTime()) {
-                    channel.send({ content: `${lastResponceUser}` }).then(msg => { msg.delete().catch(() => { }) }).catch(() => { });
-                    messageEmbed.setFooter({ text: `${lastResponceUser.username} acabou de ser notificado(a) do envio desta mensagem.`, iconURL: "https://i.imgur.com/Aatgi3x.png" })
+                if (message.content) {
+                    let messageEmbed = new MessageEmbed()
+                        .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
+                        .setDescription(`${message.content}`);
+                    let lastResponceUser = await this.client.users.cache.get(ticket.lastResponceUserId);
+                    let lastResponceUserObject = await this.client.database.users.findOne({ userId: message.author.id });
+                    let ticketInactiveTime = this.client.ticketConfig.ticketInactiveTime;
+                    if (lastResponceUserObject && lastResponceUserObject.profile && lastResponceUserObject.profile.ticketInactiveTime) ticketInactiveTime = lastResponceUserObject.profile.ticketInactiveTime;
+                    if (lastResponceUser && ticket.lastResponceAt + ticketInactiveTime <= new Date().getTime()) {
+                        channel.send({ content: `${lastResponceUser}` }).then(msg => { msg.delete().catch(() => { }) }).catch(() => { });
+                        messageEmbed.setFooter({ text: `${lastResponceUser.username} acabou de ser notificado(a) do envio desta mensagem.`, iconURL: "https://i.imgur.com/Aatgi3x.png" })
+                    }
+                    channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 }
-                if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
-                channel.send({ embeds: [messageEmbed] }).catch(() => { });
                 let sentEmbed = new MessageEmbed()
                     .setTitle(`${this.client.customEmojis.messages}⠀Recebemos essa mensagem!`);
                 message.reply({ embeds: [sentEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
