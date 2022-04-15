@@ -34,19 +34,22 @@ module.exports = class {
                 if (message.content && message.content.startsWith("&")) return;
                 if (message.content && message.content.startsWith("//")) {
                     let commentContent = message.content.substring(2);
-                    let attachments = "";
                     message.attachments.forEach(attachment => {
-                        if (attachments == "") attachments += `\n\n[\`[${attachment.name}]\`](${attachment.url})`
-                        else attachments += `\n[\`[${attachment.name}]\`](${attachment.url})`
+                        let attachmentEmbed = new MessageEmbed()
+                            .setTitle(`${this.client.customEmojis.folder} Este arquivo foi enviado no comentário por ${message.author.username}.`)
+                            .setURL(attachment.url)
+                            .setImage(attachment.url)
+                            .setFooter({ text: `Nome do arquivo: ${attachment.name}` })
+                            .setColor(`${this.client.ticketConfig.commentColor}`);
+                        message.channel.send({ embeds: [attachmentEmbed] }).catch(() => { });
                     });
-                    if (commentContent == "" && attachments == "") commentContent = "Não é possível fixar um comentário sem nenhuma mensagem!";
-                    commentContent += attachments;
-                    let commentEmbed = new MessageEmbed()
-                        .setAuthor({ name: `${message.author.username} comentou:`, iconURL: message.author.displayAvatarURL() })
-                        .setDescription(`${commentContent}`)
-                        .setColor(`${this.client.ticketConfig.commentColor}`);
-                    if (message.attachments.first()) commentEmbed.setImage(message.attachments.first().url);
-                    message.channel.send({ embeds: [commentEmbed] }).catch(() => { });
+                    if (commentContent != "") {
+                        let commentEmbed = new MessageEmbed()
+                            .setAuthor({ name: `${message.author.username} comentou:`, iconURL: message.author.displayAvatarURL() })
+                            .setDescription(`${commentContent}`)
+                            .setColor(`${this.client.ticketConfig.commentColor}`);
+                        message.channel.send({ embeds: [commentEmbed] }).catch(() => { });
+                    }
                     message.delete().catch(() => { });
                     return;
                 }
