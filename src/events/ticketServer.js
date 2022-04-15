@@ -42,7 +42,7 @@ module.exports = class {
                     if (commentContent == "" && attachments == "") commentContent = "Não é possível fixar um comentário sem nenhuma mensagem!";
                     commentContent += attachments;
                     let commentEmbed = new MessageEmbed()
-                        .setAuthor({ name: `${message.author.username} deixou um comentário!`, iconURL: message.author.displayAvatarURL() })
+                        .setAuthor({ name: `${message.author.username} comentou:`, iconURL: message.author.displayAvatarURL() })
                         .setDescription(`${commentContent}`)
                         .setColor(`${this.client.ticketConfig.commentColor}`);
                     if (message.attachments.first()) commentEmbed.setImage(message.attachments.first().url);
@@ -59,12 +59,12 @@ module.exports = class {
                 });
                 messageContent += attachments;
                 let messageEmbed = new MessageEmbed()
-                    .setAuthor({ name: `${message.author.username} enviou uma mensagem!`, iconURL: message.author.displayAvatarURL() })
+                    .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`${messageContent}`);
                 let centralMessageEmbed = new MessageEmbed()
-                    .setAuthor({ name: `${message.author.username} enviou uma mensagem!`, iconURL: message.author.displayAvatarURL() })
+                    .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`${messageContent}`);
-                if (userObject && userObject.profile && userObject.profile.anonymous) { messageEmbed.setAuthor({ name: "Um membro da equipe enviou uma mensagem!", iconURL: "https://i.imgur.com/cSqp77S.png" }); centralMessageEmbed.setFooter({ text: "Essa mensagem foi para o membro anonimamente." }) }
+                if (userObject && userObject.profile && userObject.profile.anonymous) { messageEmbed.setAuthor({ name: "Membro da equipe.", iconURL: "https://i.imgur.com/cSqp77S.png" }); centralMessageEmbed.setFooter({ text: "O membro não pode ver quem enviou esta mensagem." }) }
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 await user.send({ embeds: [messageEmbed] }).then(() => {
                     message.channel.send({ embeds: [centralMessageEmbed] }).catch(() => { });

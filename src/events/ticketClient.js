@@ -108,7 +108,7 @@ module.exports = class {
                 });
                 messageContent += attachments;
                 let messageEmbed = new MessageEmbed()
-                    .setAuthor({ name: `${message.author.username} enviou uma mensagem!`, iconURL: message.author.displayAvatarURL() })
+                    .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`${messageContent}`);
                 if (message.attachments.first()) messageEmbed.setImage(message.attachments.first().url);
                 channel.send({ embeds: [messageEmbed] }).catch(() => { });
@@ -138,7 +138,7 @@ module.exports = class {
                 });
                 messageContent += attachments;
                 let messageEmbed = new MessageEmbed()
-                    .setAuthor({ name: `${message.author.username} enviou uma mensagem!`, iconURL: message.author.displayAvatarURL() })
+                    .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`${messageContent}`);
                 let lastResponceUser = await this.client.users.cache.get(ticket.lastResponceUserId);
                 let lastResponceUserObject = await this.client.database.users.findOne({ userId: message.author.id });
