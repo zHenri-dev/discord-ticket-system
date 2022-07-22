@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const moment = require("moment");
 moment.locale("pt-br");
 
@@ -20,14 +20,14 @@ module.exports = class Profile {
                 });
             }
             if (!user.profile) {
-                let noProfileEmbed = new MessageEmbed()
+                let noProfileEmbed = new EmbedBuilder()
                     .setAuthor({ name: `Banco de dados pessoal desativado!`, iconURL: "https://i.imgur.com/Y5YYwKg.png" })
                     .setDescription(`Necessário ter o banco de dados pessoal habilitado para fazer poder ver o perfil.`)
                     .setFooter({ text: `Clique no botão abaixo para habilitar o banco de dados pessoal, do mesmo ficarão salvos registros de alterações de menos importância ou que só envolvam você.` });
-                let row = new MessageActionRow().addComponents(
-                    new MessageButton()
+                let row = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
                         .setCustomId(`activate-profile`)
-                        .setStyle("PRIMARY")
+                        .setStyle(ButtonStyle.Primary)
                         .setLabel("Habilitar o banco de dados pessoal."),
                 );
                 let noProfileMessage = await message.reply({ embeds: [noProfileEmbed], components: [row], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -44,7 +44,7 @@ module.exports = class Profile {
                         }
                         user.save();
                         noProfileMessage.edit({ content: `${message.author.username} precisou ativar o banco de dados pessoal.`, embeds: [], components: [] }).catch(() => { });
-                        let successEmbed = new MessageEmbed()
+                        let successEmbed = new EmbedBuilder()
                             .setAuthor({ name: `O seu banco de dados pessoal foi habilitado com sucesso!`, iconURL: "https://i.imgur.com/Y5YYwKg.png" })
                             .setDescription(`A alteração realizada foi salva no seu banco de dados pessoal, e está disponível para você em quaisquer momento que solicitar o resumo das atividades.`);
                         noProfileMessage.reply({ embeds: [successEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -53,7 +53,7 @@ module.exports = class Profile {
                 return;
             }
             let historyString = await this.client.functions.getProfileHistory(user.profile.history);
-            let profileEmbed = new MessageEmbed()
+            let profileEmbed = new EmbedBuilder()
                 .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                 .setDescription(`A seguir estão algumas informações e alterações que podem ser realizadas, algumas podendo pedir confirmação dependendo do seu grau de importância.\n⠀\n⠀${this.client.customEmojis.conveyor} **Histórico de alterações:**${historyString}\n⠀\n⠀ ${this.client.customEmojis.settings} **Configurações:**\nEntre cochetes tem um ID que você pode enviar neste canal para alterar a configuração correspondente. Configurações secundárias também são alteradas!\n\n${user.profile.anonymous ? this.client.customEmojis.on : this.client.customEmojis.off} | \`[01]\` Modo anônimo.\n${user.profile.mentions ? this.client.customEmojis.on : this.client.customEmojis.off} | \`[02]\` Recebimento de notificações.\n⠀↳ Tempo inativo atual: ${user.profile.ticketInactiveTime / 60 / 1000} minutos\n⠀`)
                 .setFooter({ text: "Algumas alterações realizadas neste painel podem interferir diretamente na relação entre você e a central de suporte, entretanto podem ser revertidas a quaisquer momento.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
@@ -67,7 +67,7 @@ module.exports = class Profile {
                     case "1":
                     case "[01]":
                         m.delete().catch(() => { });
-                        let anonymousEmbed = new MessageEmbed()
+                        let anonymousEmbed = new EmbedBuilder()
                             .setDescription(`Confirme nas opções abaixo se você deseja ${user.profile.anonymous ? "desativar" : "ativar"} o modo anônimo da sua conta.`)
                             .setFooter({ text: "Essa opção interfere apenas no contato entre você e o membro que você está atendendo, o mesmo não saberá com quem ele está falando.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
                         profileMessage.edit({ content: `**${message.author.username}** você está mexendo na configurações do modo anônimo.`, embeds: [anonymousEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -81,7 +81,7 @@ module.exports = class Profile {
                                 history: [...user.profile.history, { string: `**${message.author.tag}** ${!user.profile.anonymous ? "ativou" : "desativou"} o modo anônimo.`, createdAt: new Date().getTime() }]
                             }
                             user.save();
-                            let successAnonymousEmbed = new MessageEmbed()
+                            let successAnonymousEmbed = new EmbedBuilder()
                                 .setDescription(`Configuração de modo anônimo alteradas para: **${user.profile.anonymous ? "Ativado(a)" : "Desativado(a)."}**`)
                                 .setFooter({ text: "Caso queira reverter esta configuração que acabou de ser aplicada, basta usar o comando novamente e seguir o mesmo procedimento.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
                             profileMessage.edit({ embeds: [successAnonymousEmbed] }).catch(() => { });
@@ -92,7 +92,7 @@ module.exports = class Profile {
                     case "2":
                     case "[02]":
                         m.delete().catch(() => { });
-                        let mentionEmbed = new MessageEmbed()
+                        let mentionEmbed = new EmbedBuilder()
                             .setDescription(`Confirme nas opções abaixo se você deseja desativar as notificações da sua conta.\n${user.profile.mentions ? `**Use ${this.client.customEmojis.settings} para editar configuração secundária desta opção.**` : `**${this.client.customEmojis.settings} As notificações de sua conta estão desativadas, por conta disso as configurações secundárias ficam indisponíveis.**`}`)
                             .setFooter({ text: "Quando um membro enviar uma mensagem para a central de suporte no canal em que a última mensagem seja sua, após ficar inativo por este tempo você será mencionado.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
                         profileMessage.edit({ content: `**${message.author.username}** você está mexendo nas configurações das notificações.`, embeds: [mentionEmbed], allowedMentions: { repliedUser: false } }).catch(() => { })
@@ -108,13 +108,13 @@ module.exports = class Profile {
                                     history: [...user.profile.history, { string: `**${message.author.tag}** ${!user.profile.mentions ? "ativou" : "desativou"} o recebimento de notificações.`, createdAt: new Date().getTime() }]
                                 }
                                 user.save();
-                                let successMentionsEmbed = new MessageEmbed()
+                                let successMentionsEmbed = new EmbedBuilder()
                                     .setDescription(`Configuração de notificações alteradas para: **${user.profile.mentions ? "Ativado(a)" : "Desativado(a)."}**`)
                                     .setFooter({ text: "Caso queira reverter esta configuração que acabou de ser aplicada, basta usar o comando novamente e seguir o mesmo procedimento.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
                                 profileMessage.edit({ embeds: [successMentionsEmbed] }).catch(() => { });
                                 profileMessage.reactions.removeAll().catch(() => { });
                             } else if (reaction.emoji.name == "settings" && user.profile.mentions) {
-                                let secondMentionEmbed = new MessageEmbed()
+                                let secondMentionEmbed = new EmbedBuilder()
                                     .setDescription(`Informe em minutos o tempo inativo de ser notificado em um canal de suporte. **Caso não queria receber notificações, será necessário desligar!**`)
                                     .setFooter({ text: "Esse tempo em minutos deve ser um número maior que 0. Se você colocar [5] após o ticket não receber novas mensagens por 5 minutos se você foi o último a enviar uma mensagem, será mencionado.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
                                 profileMessage.edit({ content: `**${this.client.customEmojis.settings} Editando as configurações secundárias das notificações.**`, embeds: [secondMentionEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -132,7 +132,7 @@ module.exports = class Profile {
                                         }
                                         user.save();
                                         m.delete().catch(() => { });
-                                        let successMentionsEmbed = new MessageEmbed()
+                                        let successMentionsEmbed = new EmbedBuilder()
                                             .setDescription(`O tempo inativo de você ser notficado foi alterado para: **${number} minuto(s)**`)
                                             .setFooter({ text: "Caso queira reverter esta configuração que acabou de ser aplicada, basta usar o comando novamente e seguir o mesmo procedimento informando o tempo anterior.", iconURL: "https://i.imgur.com/j2gkJ7c.png" });
                                         profileMessage.edit({ embeds: [successMentionsEmbed] }).catch(() => { });

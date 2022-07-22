@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require("discord.js");
 const moment = require("moment");
 moment.locale("pt-br");
 
@@ -17,11 +17,11 @@ module.exports = class Remanejar {
                 message.reply({ content: "Este comando apenas pode ser executado dentro de um canal de atendimento!" }).then(msg => { setTimeout(() => { msg.delete().catch(() => { }); message.delete().catch(() => { }); }, 10000); }).catch(() => { });
                 return;
             }
-            let selectNewCategoryEmbed = new MessageEmbed()
+            let selectNewCategoryEmbed = new EmbedBuilder()
                 .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                 .setDescription(`Após confirmar o remanejamento do canal, esta informação ficará vinculada no canal até o seu encerramento.`)
-            let row = new MessageActionRow().addComponents(
-                new MessageSelectMenu()
+            let row = new ActionRowBuilder().addComponents(
+                new SelectMenuBuilder()
                     .setCustomId(`remanejar-select`)
                     .setPlaceholder('Escolha a categoria que deseja remanejar.')
                     .addOptions([
@@ -59,7 +59,7 @@ module.exports = class Remanejar {
                             ticket.history.push({ string: `**${message.author.tag}** remanejou este canal de suporte. [${i.values[0] == "remanejar-high" ? "%highEmoji%" : "%lowEmoji%"}]`, createdAt: new Date().getTime() });
                             ticket.save();
                             this.client.functions.updateTicketHistory(ticket);
-                            let successEmbed = new MessageEmbed()
+                            let successEmbed = new EmbedBuilder()
                                 .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                                 .setDescription(`Mais informações sobre este remanejamento estão fixadas na primeira mensagem do canal. O histórico do canal de suporte não pode ser alterado!`);
                             let successMessage = await message.reply({ embeds: [successEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });

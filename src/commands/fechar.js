@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = class Fechar {
     constructor(client) {
@@ -15,7 +15,7 @@ module.exports = class Fechar {
                 message.reply({ content: "Este comando apenas pode ser executado dentro de um canal de atendimento!" }).then(msg => { setTimeout(() => { msg.delete().catch(() => { }); message.delete().catch(() => { }); }, 10000); }).catch(() => { });
                 return;
             }
-            let closingEmbed = new MessageEmbed()
+            let closingEmbed = new EmbedBuilder()
                 .setAuthor({ name: `Encerrando canal de suporte.`, iconURL: `https://i.imgur.com/kLw1M7i.png` })
                 .setDescription(`Esta ação não pode ser revertida, estamos encerrando este canal de atendimento e o membro receberá um cooldown para a criação de novos canais de suporte.`)
             message.reply({ embeds: [closingEmbed], allowedMentions: { repliedUser: false } }).catch(() => { });
@@ -30,7 +30,7 @@ module.exports = class Fechar {
                     let userObject = await this.client.database.users.findOne({ userId: message.author.id });
                     let anonymous = false;
                     if (userObject && userObject.profile && userObject.anonymous) anonymous = true;
-                    let closedEmbed = new MessageEmbed()
+                    let closedEmbed = new EmbedBuilder()
                         .setAuthor({ name: `${!anonymous ? message.author.username : "Um membro da equipe"} encerrou seu canal de suporte.`, iconURL: `${!anonymous ? message.author.displayAvatarURL() : "https://i.imgur.com/cSqp77S.png"}` })
                         .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                         .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })

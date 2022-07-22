@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = class TitcketSetup {
     constructor(client) {
@@ -18,7 +18,7 @@ module.exports = class TitcketSetup {
                 return;
             }
             let ticketCount = (await this.client.database.tickets.find({ closed: false })).length;
-            let embed = new MessageEmbed()
+            let embed = new EmbedBuilder()
                 .setAuthor({ name: "Área de atendimento ao jogador.", iconURL: "https://i.imgur.com/UOYVtyT.png" })
                 .setDescription(`Clique no emoji abaixo para ser redirecionado a criação de seu ticket, o atendimento será realizado por meio de suas mensagens privadas.\n\n⠀ **Histórico:**${await this.client.functions.getGlobalHistory()}\n\n⠀ **Informações:**\n${this.client.customEmojis.gunpowder} Estamos com ${ticketCount} canais de suporte abertos.\n${this.client.customEmojis.connection} Latência: ~${this.client.ws.ping}ms.`)
                 .setFooter({ text: "Clique nesta reação abaixo para criar um canal de suporte, converse conosco através de suas mensagens privadas! Lembre-se de deixar sua DM aberta." })

@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = class {
     constructor(client) {
@@ -11,7 +11,7 @@ module.exports = class {
             if (interaction.customId.startsWith("close-") && interaction.customId.replace("close-", "") == interaction.message.channelId) {
                 try { interaction.message.components[0].components[0].setDisabled(true); } catch { }
                 interaction.message.edit({ embeds: interaction.message.embeds, components: interaction.message.components }).catch(() => { });
-                let closingEmbed = new MessageEmbed()
+                let closingEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${interaction.user.username} solicitou o encerramento deste canal de suporte!`, iconURL: `https://i.imgur.com/kLw1M7i.png` })
                     .setDescription(`Esta ação não pode ser revertida, estamos encerrando este canal de atendimento e o membro receberá um cooldown para a criação de novos canais de suporte.`)
                 interaction.reply({ embeds: [closingEmbed] }).catch(() => { });
@@ -28,7 +28,7 @@ module.exports = class {
                             let anonymous = false;
                             if (userObject && userObject.profile && userObject.anonymous) anonymous = true;
                             tag = user.tag;
-                            let closedEmbed = new MessageEmbed()
+                            let closedEmbed = new EmbedBuilder()
                                 .setAuthor({ name: `${!anonymous ? interaction.user.username : "Um membro da equipe"} encerrou seu canal de suporte.`, iconURL: `${!anonymous ? interaction.user.displayAvatarURL() : "https://i.imgur.com/cSqp77S.png"}` })
                                 .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                                 .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })

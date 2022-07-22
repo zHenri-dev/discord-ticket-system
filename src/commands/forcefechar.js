@@ -1,4 +1,4 @@
-const { MessageEmbed } = require("discord.js");
+const { EmbedBuilder } = require("discord.js");
 
 module.exports = class Forcefechar {
     constructor(client) {
@@ -24,7 +24,7 @@ module.exports = class Forcefechar {
                 return;
             }
             let ticket = await this.client.database.tickets.findOne({ channelId: message.channel.id, closed: false });
-            let closingEmbed = new MessageEmbed()
+            let closingEmbed = new EmbedBuilder()
                 .setAuthor({ name: `${message.author.username} solicitou o encerramento forçado deste canal!`, iconURL: `https://i.imgur.com/kLw1M7i.png` })
                 .setDescription(`Esta ação não pode ser revertida, estamos encerrando este canal de atendimento e o membro **não** receberá um cooldown para a criação de novos canais de suporte.`)
             channel.send({ embeds: [closingEmbed] }).catch(() => { });
@@ -41,7 +41,7 @@ module.exports = class Forcefechar {
                         let userObject = await this.client.database.users.findOne({ userId: message.author.id });
                         let anonymous = false;
                         if (userObject && userObject.profile && userObject.anonymous) anonymous = true;
-                        let closedEmbed = new MessageEmbed()
+                        let closedEmbed = new EmbedBuilder()
                             .setAuthor({ name: `${!anonymous ? message.author.username : "Um membro da equipe"} encerrou seu canal de suporte.`, iconURL: `${!anonymous ? message.author.displayAvatarURL() : "https://i.imgur.com/cSqp77S.png"}` })
                             .setDescription("Um atendente acabou de encerrar seu atendimento, agora espere o fim do tempo de espera para criar outro canal de suporte.")
                             .setFooter({ text: "Caso tente enviar uma mensagem e seu tempo de espera ainda esteja ativo, será informado o quanto ainda e necessário esperar!" })

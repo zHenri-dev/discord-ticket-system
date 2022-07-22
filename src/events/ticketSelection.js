@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageSelectMenu } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, SelectMenuBuilder } = require("discord.js");
 
 module.exports = class {
     constructor(client) {
@@ -20,12 +20,12 @@ module.exports = class {
                     let message = await channel.messages.fetch(data.d.message_id).catch(() => { });
                     if (!message) return;
                     (await message.reactions.cache.get(this.client.ticketConfig.emojiName)).users.remove(data.d.user_id);
-                    let creatingEmbed = new MessageEmbed()
+                    let creatingEmbed = new EmbedBuilder()
                         .setTitle("Criando seu ticket.")
                         .setDescription("Pedimos que você redirecione-se as suas mensagens privadas onde estaremos enviando mas informações.")
                         .setImage("https://minecraftskinstealer.com/achievement/35/Converse+conosco./Confira+seu+privado!");
                     message.channel.send({ embeds: [creatingEmbed] }).then(msg => { setTimeout(() => { msg.delete().catch(() => { }) }, 5000); }).catch(() => { });
-                    let categorySelectorEmbed = new MessageEmbed()
+                    let categorySelectorEmbed = new EmbedBuilder()
                         .setAuthor({ name: `${user.username}`, iconURL: user.displayAvatarURL() })
                         .setDescription(`Escolha dentre as categorias abaixo para classificar seu atendimento, é possível pular este processo enviando uma mensagem neste canal com seu problema!`)
                     let options = [];
@@ -37,8 +37,8 @@ module.exports = class {
                             value: `${category}`,
                         });
                     }
-                    const row = new MessageActionRow().addComponents(
-                        new MessageSelectMenu()
+                    const row = new ActionRowBuilder().addComponents(
+                        new SelectMenuBuilder()
                             .setCustomId(`category-select`)
                             .setPlaceholder('Escolha a categoria que deseja classificar')
                             .addOptions(options)
@@ -59,7 +59,7 @@ module.exports = class {
                             let newObject = { ...current, category: id };
                             this.client.selects[index] = newObject;
                         }
-                        let successEmbed = new MessageEmbed()
+                        let successEmbed = new EmbedBuilder()
                             .setTitle("Canal de suporte classificado com sucesso!")
                             .setDescription("⠀\nTodas as mensagens enviadas neste canal serão redirecionadas aos atendentes responsáveis pela categoria que você o escolheu.")
                             .setFooter({ text: `${category.name}` })

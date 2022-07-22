@@ -1,4 +1,4 @@
-const { Client, Collection } = require("discord.js");
+const { Client, Collection, Partials, GatewayIntentBits } = require("discord.js");
 const { readdirSync } = require("fs");
 const { connectDatabase } = require("./database/index.js");
 const Functions = require("./objects/functions.js");
@@ -88,8 +88,19 @@ class TicketSystemClient extends Client {
 }
 
 const TicketSystem = new TicketSystemClient({
-    intents: 32767,
-    partials: ["CHANNEL"]
+    intents: [
+        GatewayIntentBits.DirectMessageReactions,
+        GatewayIntentBits.DirectMessages,
+        GatewayIntentBits.GuildEmojisAndStickers,
+        GatewayIntentBits.GuildIntegrations,
+        GatewayIntentBits.GuildMembers,
+        GatewayIntentBits.GuildMessageReactions,
+        GatewayIntentBits.GuildMessages,
+        GatewayIntentBits.GuildPresences,
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.MessageContent
+    ],
+    partials: [Partials.Channel]
 });
 
 TicketSystem.start();

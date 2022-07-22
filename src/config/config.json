@@ -2,9 +2,8 @@
     "defaultPrefix": "&",
     "token": "",
     "databaseString": "",
-    "webhook": "",
     "ticketConfig": {
-        "currentDay": 15,
+        "currentDay": 22,
         "maxTickets": 100,
         "cooldownAfterClose": 10800000,
         "ticketInactiveTime": 300000,

@@ -1,4 +1,4 @@
-const { MessageEmbed, MessageActionRow, MessageButton } = require("discord.js");
+const { EmbedBuilder, ActionRowBuilder, ButtonBuilder, ButtonStyle } = require("discord.js");
 const moment = require("moment");
 moment.locale("pt-br");
 
@@ -13,10 +13,10 @@ module.exports = class {
             if (!message.guild || message.author.bot === true || message.guild.id != this.client.ticketConfig.centralGuildId) return;
             let ticket = await this.client.database.tickets.findOne({ channelId: message.channel.id, closed: false });
             if (ticket) {
-                let closeRow = new MessageActionRow().addComponents(
-                    new MessageButton()
+                let closeRow = new ActionRowBuilder().addComponents(
+                    new ButtonBuilder()
                         .setCustomId(`close-${message.channel.id}`)
-                        .setStyle("DANGER")
+                        .setStyle(ButtonStyle.Danger)
                         .setLabel("Encerrar o atendimento."),
                 );
 
@@ -24,7 +24,7 @@ module.exports = class {
                 let userObject = await this.client.database.users.findOne({ userId: message.author.id });
                 if (!user) {
                     message.delete().catch(() => { });
-                    let errorEmbed = new MessageEmbed()
+                    let errorEmbed = new EmbedBuilder()
                         .setAuthor({ name: `${message.author.username} não foi possível encontrar o membro!`, iconURL: message.author.displayAvatarURL() })
                         .setDescription(`O membro pode ter saído do discord principal ou sua conta pode ter sido desativada.`)
                         .setColor(this.client.ticketConfig.errorColor);
@@ -35,7 +35,7 @@ module.exports = class {
                 if (message.content && message.content.startsWith("//")) {
                     let commentContent = message.content.substring(2);
                     message.attachments.forEach(attachment => {
-                        let attachmentEmbed = new MessageEmbed()
+                        let attachmentEmbed = new EmbedBuilder()
                             .setTitle(`${this.client.customEmojis.folder} Este arquivo foi enviado no comentário por ${message.author.username}.`)
                             .setURL(attachment.url)
                             .setImage(attachment.url)
@@ -44,7 +44,7 @@ module.exports = class {
                         message.channel.send({ embeds: [attachmentEmbed] }).catch(() => { });
                     });
                     if (commentContent != "") {
-                        let commentEmbed = new MessageEmbed()
+                        let commentEmbed = new EmbedBuilder()
                             .setAuthor({ name: `${message.author.username} comentou:`, iconURL: message.author.displayAvatarURL() })
                             .setDescription(`${commentContent}`)
                             .setColor(`${this.client.ticketConfig.commentColor}`);
@@ -53,18 +53,18 @@ module.exports = class {
                     message.delete().catch(() => { });
                     return;
                 }
-                let errorEmbed = new MessageEmbed()
+                let errorEmbed = new EmbedBuilder()
                     .setAuthor({ name: `${message.author.username} ocorreu um erro ao enviar a mensagem!`, iconURL: message.author.displayAvatarURL() })
                     .setDescription(`O membro desativou o recebimentos de mensagens privadas ou bloqueou o bot.`)
                     .setColor(this.client.ticketConfig.errorColor);
 
                 message.attachments.forEach(async attachment => {
-                    let attachmentCentralEmbed = new MessageEmbed()
+                    let attachmentCentralEmbed = new EmbedBuilder()
                         .setTitle(`${this.client.customEmojis.folder} Este arquivo foi enviado por ${message.author.username} para o membro.`)
                         .setURL(attachment.url)
                         .setImage(attachment.url)
                         .setFooter({ text: `Nome do arquivo: ${attachment.name}` });
-                    let attachmentMemberEmbed = new MessageEmbed()
+                    let attachmentMemberEmbed = new EmbedBuilder()
                         .setTitle(`${this.client.customEmojis.folder} Este arquivo foi enviado por ${message.author.username}.`)
                         .setURL(attachment.url)
                         .setImage(attachment.url)
@@ -76,10 +76,10 @@ module.exports = class {
                     });
                 });
                 if (message.content) {
-                    let messageEmbed = new MessageEmbed()
+                    let messageEmbed = new EmbedBuilder()
                         .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                         .setDescription(`${message.content}`);
-                    let centralMessageEmbed = new MessageEmbed()
+                    let centralMessageEmbed = new EmbedBuilder()
                         .setAuthor({ name: `${message.author.username}`, iconURL: message.author.displayAvatarURL() })
                         .setDescription(`${message.content}`);
                     if (userObject && userObject.profile && userObject.profile.anonymous) { messageEmbed.setAuthor({ name: "Membro da equipe.", iconURL: "https://i.imgur.com/cSqp77S.png" }); centralMessageEmbed.setFooter({ text: "O membro não pode ver quem enviou esta mensagem." }) }
@@ -90,8 +90,8 @@ module.exports = class {
                     });
                 }
                 message.delete().catch(() => { });
-                ticket.lastResponceUserId = message.author.id;
-                ticket.lastResponceAt = new Date().getTime();
+                ticket.lastResponseUserId = message.author.id;
+                ticket.lastResponseAt = new Date().getTime();
                 ticket.save();
             }
         } catch (error) {

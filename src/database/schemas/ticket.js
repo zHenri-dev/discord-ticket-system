@@ -5,8 +5,8 @@ const ticketSchema = Schema({
     channelId: String,
     firstMessageId: String,
     category: String,
-    lastResponceUserId: String,
-    lastResponceAt: Number,
+    lastResponseUserId: String,
+    lastResponseAt: Number,
     closed: String,
     history: Array,
     createdAt: Number
